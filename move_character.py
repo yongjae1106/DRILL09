@@ -1,3 +1,5 @@
+import math
+
 from pico2d import *
 
 # 화면 크기 (배경 TUK_GROUND.png 크기와 동일)
@@ -73,8 +75,11 @@ def update_character(dt):
 
     if dir_x != 0:  # 위아래로만 움직일 때는 기존 방향 유지
         face = dir_x
-    x = clamp(MIN_X, x + dir_x * SPEED * dt, MAX_X)
-    y = clamp(MIN_Y, y + dir_y * SPEED * dt, MAX_Y)
+    speed = SPEED
+    if dir_x != 0 and dir_y != 0:  # 대각선 이동 시 속도가 √2 배가 되지 않도록 보정
+        speed = SPEED / math.sqrt(2)
+    x = clamp(MIN_X, x + dir_x * speed * dt, MAX_X)
+    y = clamp(MIN_Y, y + dir_y * speed * dt, MAX_Y)
     frame = (frame + ANIMATION_FPS * dt) % FRAME_COUNT
 
 
