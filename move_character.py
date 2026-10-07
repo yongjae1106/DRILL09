@@ -16,6 +16,10 @@ RUN_LEFT = 0
 # 이동 속도 (프레임당 픽셀)
 SPEED = 10
 
+# 화면 경계 (캐릭터 크기의 절반만큼 안쪽)
+MIN_X, MAX_X = FRAME_WIDTH // 2, TUK_WIDTH - FRAME_WIDTH // 2
+MIN_Y, MAX_Y = FRAME_HEIGHT // 2, TUK_HEIGHT - FRAME_HEIGHT // 2
+
 open_canvas(TUK_WIDTH, TUK_HEIGHT)
 tuk_ground = load_image('TUK_GROUND.png')
 character = load_image('animation_sheet.png')
