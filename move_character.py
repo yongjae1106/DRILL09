@@ -7,6 +7,12 @@ TUK_WIDTH, TUK_HEIGHT = 1280, 1024
 FRAME_WIDTH, FRAME_HEIGHT = 100, 100
 FRAME_COUNT = 8
 
+# 스프라이트 시트의 줄 위치 (clip_draw 의 bottom 값)
+IDLE_RIGHT = 300
+IDLE_LEFT = 200
+RUN_RIGHT = 100
+RUN_LEFT = 0
+
 open_canvas(TUK_WIDTH, TUK_HEIGHT)
 tuk_ground = load_image('TUK_GROUND.png')
 character = load_image('animation_sheet.png')
@@ -30,7 +36,7 @@ frame = 0
 while running:
     clear_canvas()
     tuk_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
-    character.clip_draw(frame * FRAME_WIDTH, 100, FRAME_WIDTH, FRAME_HEIGHT, x, y)
+    character.clip_draw(frame * FRAME_WIDTH, IDLE_RIGHT, FRAME_WIDTH, FRAME_HEIGHT, x, y)
     update_canvas()
     handle_events()
     frame = (frame + 1) % FRAME_COUNT
