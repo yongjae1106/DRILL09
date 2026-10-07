@@ -73,8 +73,8 @@ while running:
     handle_events()
     if dir_x != 0:  # 위아래로만 움직일 때는 기존 방향 유지
         face = dir_x
-    x += dir_x * SPEED
-    y += dir_y * SPEED
+    x = clamp(MIN_X, x + dir_x * SPEED, MAX_X)
+    y = clamp(MIN_Y, y + dir_y * SPEED, MAX_Y)
     frame = (frame + 1) % FRAME_COUNT
     delay(0.05)
 
