@@ -22,7 +22,7 @@ character = load_image('animation_sheet.png')
 
 
 def handle_events():
-    global running, dir_x
+    global running, dir_x, dir_y
 
     events = get_events()
     for event in events:
@@ -35,17 +35,26 @@ def handle_events():
                 dir_x += 1
             elif event.key == SDLK_LEFT:
                 dir_x -= 1
+            elif event.key == SDLK_UP:
+                dir_y += 1
+            elif event.key == SDLK_DOWN:
+                dir_y -= 1
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
                 dir_x -= 1
             elif event.key == SDLK_LEFT:
                 dir_x += 1
+            elif event.key == SDLK_UP:
+                dir_y -= 1
+            elif event.key == SDLK_DOWN:
+                dir_y += 1
 
 
 running = True
 x, y = TUK_WIDTH // 2, TUK_HEIGHT // 2
 frame = 0
 dir_x = 0  # 좌우 이동 방향 (-1: 왼쪽, 0: 정지, 1: 오른쪽)
+dir_y = 0  # 상하 이동 방향 (-1: 아래, 0: 정지, 1: 위)
 face = 1  # 바라보는 방향 (1: 오른쪽, -1: 왼쪽)
 
 while running:
