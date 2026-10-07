@@ -54,6 +54,24 @@ def handle_events():
                 dir_y += 1
 
 
+def update_character():
+    global x, y, face, frame
+
+    if dir_x != 0:  # 위아래로만 움직일 때는 기존 방향 유지
+        face = dir_x
+    x = clamp(MIN_X, x + dir_x * SPEED, MAX_X)
+    y = clamp(MIN_Y, y + dir_y * SPEED, MAX_Y)
+    frame = (frame + 1) % FRAME_COUNT
+
+
+def draw_character():
+    if dir_x == 0 and dir_y == 0:
+        row = IDLE_RIGHT if face == 1 else IDLE_LEFT
+    else:
+        row = RUN_RIGHT if face == 1 else RUN_LEFT
+    character.clip_draw(frame * FRAME_WIDTH, row, FRAME_WIDTH, FRAME_HEIGHT, x, y)
+
+
 running = True
 x, y = TUK_WIDTH // 2, TUK_HEIGHT // 2
 frame = 0
@@ -64,18 +82,10 @@ face = 1  # 바라보는 방향 (1: 오른쪽, -1: 왼쪽)
 while running:
     clear_canvas()
     tuk_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
-    if dir_x == 0 and dir_y == 0:
-        row = IDLE_RIGHT if face == 1 else IDLE_LEFT
-    else:
-        row = RUN_RIGHT if face == 1 else RUN_LEFT
-    character.clip_draw(frame * FRAME_WIDTH, row, FRAME_WIDTH, FRAME_HEIGHT, x, y)
+    draw_character()
     update_canvas()
     handle_events()
-    if dir_x != 0:  # 위아래로만 움직일 때는 기존 방향 유지
-        face = dir_x
-    x = clamp(MIN_X, x + dir_x * SPEED, MAX_X)
-    y = clamp(MIN_Y, y + dir_y * SPEED, MAX_Y)
-    frame = (frame + 1) % FRAME_COUNT
+    update_character()
     delay(0.05)
 
 close_canvas()
