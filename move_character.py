@@ -13,8 +13,11 @@ IDLE_LEFT = 200
 RUN_RIGHT = 100
 RUN_LEFT = 0
 
-# 이동 속도 (프레임당 픽셀)
-SPEED = 10
+# 이동 속도 (초당 픽셀)
+SPEED = 200
+
+# 애니메이션 속도 (초당 프레임)
+ANIMATION_FPS = 20
 
 # 화면 경계 (캐릭터 크기의 절반만큼 안쪽)
 MIN_X, MAX_X = FRAME_WIDTH // 2, TUK_WIDTH - FRAME_WIDTH // 2
@@ -54,14 +57,14 @@ def handle_events():
                 dir_y += 1
 
 
-def update_character():
+def update_character(dt):
     global x, y, face, frame
 
     if dir_x != 0:  # 위아래로만 움직일 때는 기존 방향 유지
         face = dir_x
-    x = clamp(MIN_X, x + dir_x * SPEED, MAX_X)
-    y = clamp(MIN_Y, y + dir_y * SPEED, MAX_Y)
-    frame = (frame + 1) % FRAME_COUNT
+    x = clamp(MIN_X, x + dir_x * SPEED * dt, MAX_X)
+    y = clamp(MIN_Y, y + dir_y * SPEED * dt, MAX_Y)
+    frame = (frame + ANIMATION_FPS * dt) % FRAME_COUNT
 
 
 def draw_character():
@@ -69,7 +72,7 @@ def draw_character():
         row = IDLE_RIGHT if face == 1 else IDLE_LEFT
     else:
         row = RUN_RIGHT if face == 1 else RUN_LEFT
-    character.clip_draw(frame * FRAME_WIDTH, row, FRAME_WIDTH, FRAME_HEIGHT, x, y)
+    character.clip_draw(int(frame) * FRAME_WIDTH, row, FRAME_WIDTH, FRAME_HEIGHT, x, y)
 
 
 running = True
@@ -78,6 +81,7 @@ frame = 0
 dir_x = 0  # 좌우 이동 방향 (-1: 왼쪽, 0: 정지, 1: 오른쪽)
 dir_y = 0  # 상하 이동 방향 (-1: 아래, 0: 정지, 1: 위)
 face = 1  # 바라보는 방향 (1: 오른쪽, -1: 왼쪽)
+last_time = get_time()
 
 while running:
     clear_canvas()
@@ -85,7 +89,10 @@ while running:
     draw_character()
     update_canvas()
     handle_events()
-    update_character()
+    current_time = get_time()
+    dt = current_time - last_time  # 이전 프레임으로부터 경과 시간 (초)
+    last_time = current_time
+    update_character(dt)
     delay(0.05)
 
 close_canvas()
