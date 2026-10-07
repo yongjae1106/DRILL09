@@ -52,7 +52,7 @@ while running:
     clear_canvas()
     tuk_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
     if dir_x == 0:
-        row = IDLE_RIGHT
+        row = IDLE_RIGHT if face == 1 else IDLE_LEFT
     else:
         row = RUN_RIGHT if face == 1 else RUN_LEFT
     character.clip_draw(frame * FRAME_WIDTH, row, FRAME_WIDTH, FRAME_HEIGHT, x, y)
