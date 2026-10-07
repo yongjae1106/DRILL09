@@ -14,10 +14,10 @@ RUN_RIGHT = 100
 RUN_LEFT = 0
 
 # 이동 속도 (초당 픽셀)
-SPEED = 200
+SPEED = 300
 
 # 애니메이션 속도 (초당 프레임)
-ANIMATION_FPS = 20
+ANIMATION_FPS = 12
 
 # 화면 경계 (캐릭터 크기의 절반만큼 안쪽)
 MIN_X, MAX_X = FRAME_WIDTH // 2, TUK_WIDTH - FRAME_WIDTH // 2
@@ -93,6 +93,6 @@ while running:
     dt = current_time - last_time  # 이전 프레임으로부터 경과 시간 (초)
     last_time = current_time
     update_character(dt)
-    delay(0.05)
+    delay(0.01)
 
 close_canvas()
