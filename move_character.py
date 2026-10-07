@@ -13,6 +13,9 @@ IDLE_LEFT = 200
 RUN_RIGHT = 100
 RUN_LEFT = 0
 
+# 이동 속도 (프레임당 픽셀)
+SPEED = 10
+
 open_canvas(TUK_WIDTH, TUK_HEIGHT)
 tuk_ground = load_image('TUK_GROUND.png')
 character = load_image('animation_sheet.png')
@@ -50,6 +53,7 @@ while running:
     character.clip_draw(frame * FRAME_WIDTH, IDLE_RIGHT, FRAME_WIDTH, FRAME_HEIGHT, x, y)
     update_canvas()
     handle_events()
+    x += dir_x * SPEED
     frame = (frame + 1) % FRAME_COUNT
     delay(0.05)
 
