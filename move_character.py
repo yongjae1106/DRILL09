@@ -60,16 +60,17 @@ face = 1  # 바라보는 방향 (1: 오른쪽, -1: 왼쪽)
 while running:
     clear_canvas()
     tuk_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
-    if dir_x == 0:
+    if dir_x == 0 and dir_y == 0:
         row = IDLE_RIGHT if face == 1 else IDLE_LEFT
     else:
         row = RUN_RIGHT if face == 1 else RUN_LEFT
     character.clip_draw(frame * FRAME_WIDTH, row, FRAME_WIDTH, FRAME_HEIGHT, x, y)
     update_canvas()
     handle_events()
-    if dir_x != 0:
+    if dir_x != 0:  # 위아래로만 움직일 때는 기존 방향 유지
         face = dir_x
     x += dir_x * SPEED
+    y += dir_y * SPEED
     frame = (frame + 1) % FRAME_COUNT
     delay(0.05)
 
