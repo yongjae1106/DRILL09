@@ -23,13 +23,21 @@ ANIMATION_FPS = 12
 MIN_X, MAX_X = FRAME_WIDTH // 2, TUK_WIDTH - FRAME_WIDTH // 2
 MIN_Y, MAX_Y = FRAME_HEIGHT // 2, TUK_HEIGHT - FRAME_HEIGHT // 2
 
+# 방향키별 이동 방향 (dx, dy)
+KEY_DIRECTIONS = {
+    SDLK_RIGHT: (1, 0),
+    SDLK_LEFT: (-1, 0),
+    SDLK_UP: (0, 1),
+    SDLK_DOWN: (0, -1),
+}
+
 open_canvas(TUK_WIDTH, TUK_HEIGHT)
 tuk_ground = load_image('TUK_GROUND.png')
 character = load_image('animation_sheet.png')
 
 
 def handle_events():
-    global running, dir_x, dir_y
+    global running
 
     events = get_events()
     for event in events:
@@ -38,23 +46,26 @@ def handle_events():
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_ESCAPE:
                 running = False
-            elif event.key == SDLK_RIGHT:
-                dir_x += 1
-            elif event.key == SDLK_LEFT:
-                dir_x -= 1
-            elif event.key == SDLK_UP:
-                dir_y += 1
-            elif event.key == SDLK_DOWN:
-                dir_y -= 1
+            elif event.key in KEY_DIRECTIONS and event.key not in pressed_keys:
+                pressed_keys.append(event.key)
         elif event.type == SDL_KEYUP:
-            if event.key == SDLK_RIGHT:
-                dir_x -= 1
-            elif event.key == SDLK_LEFT:
-                dir_x += 1
-            elif event.key == SDLK_UP:
-                dir_y -= 1
-            elif event.key == SDLK_DOWN:
-                dir_y += 1
+            if event.key in pressed_keys:
+                pressed_keys.remove(event.key)
+
+    update_direction()
+
+
+def update_direction():
+    # 좌우, 상하 각각 가장 나중에 누른 방향키를 따른다
+    global dir_x, dir_y
+
+    dir_x, dir_y = 0, 0
+    for key in pressed_keys:
+        dx, dy = KEY_DIRECTIONS[key]
+        if dx != 0:
+            dir_x = dx
+        if dy != 0:
+            dir_y = dy
 
 
 def update_character(dt):
@@ -81,6 +92,7 @@ frame = 0
 dir_x = 0  # 좌우 이동 방향 (-1: 왼쪽, 0: 정지, 1: 오른쪽)
 dir_y = 0  # 상하 이동 방향 (-1: 아래, 0: 정지, 1: 위)
 face = 1  # 바라보는 방향 (1: 오른쪽, -1: 왼쪽)
+pressed_keys = []  # 눌려 있는 방향키 (나중에 누른 키가 뒤쪽)
 last_time = get_time()
 
 while running:
